@@ -166,6 +166,9 @@ void amr_cc_receive(FabComponentBlock<Real, D>* b, const diy::Master::ProxyWithL
 
     auto* l = static_cast<AMRLink*>(cp.link());
 
+	fmt::print("[Before receive] components_ size = {}\n", b->components_.size());
+	fmt::print("[Before receive] merge_tree_ size = {}\n", b->merge_tree_.size());
+
     LinkVector received_links;
     std::vector<TripletMergeTree> received_trees;
 
@@ -258,6 +261,9 @@ void amr_cc_receive(FabComponentBlock<Real, D>* b, const diy::Master::ProxyWithL
         timer.restart();
 #endif
         r::repair(b->merge_tree_);
+
+	fmt::print("[After merge] merge_tree_ size = {}\n", b->merge_tree_.size());
+
 
 #ifdef REEBER_DO_DETAILED_TIMING
         b->repair_time += timer.elapsed();
@@ -354,4 +360,6 @@ void amr_cc_receive(FabComponentBlock<Real, D>* b, const diy::Master::ProxyWithL
 
     b->global_receive_time += global_timer.elapsed();
 #endif
+	fmt::print("[End receive] components_ size = {}\n", b->components_.size());
+fmt::print("[End receive] merge_tree_ size = {}\n", b->merge_tree_.size());
 }
